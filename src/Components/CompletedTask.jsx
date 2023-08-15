@@ -31,7 +31,7 @@ function CompletedTask() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }} className='bg-white absolute left-0 top-20 z-10 w-52 min-h-min'>
       {completedTasks.length=== 0 ?
-        (<p className='bg-red-700 text-white'>
+        (<p onClick={()=>{setIsOpen(false)}} className='bg-red-700 text-white'>
           you have not completed a task yet!
         </p>):
         <div className='bg-white w-72 h-36 overflow-scroll rounded-r-xl snap-x'>
