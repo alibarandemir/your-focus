@@ -4,6 +4,7 @@ import {AiFillDelete,AiFillClockCircle} from 'react-icons/ai';
 import { motion,AnimatePresence } from 'framer-motion';
 import TaskContext from '../Context/GlobalState';
 import { useNavigate} from 'react-router-dom';
+import { db } from '../db/firebase';
 
 function Task(props) {
     const {setCompletedTasks,setTasks} = useContext(TaskContext);
@@ -30,11 +31,19 @@ function Task(props) {
         return 0;
       }
     }
-    const handleDeleteBtn=()=>{
-      setTasks((prev)=>{
-        return (prev.filter((task,index)=>{
-          return index!==props.id;
-        }))
+    const handleDeleteBtn =  ()=>{
+      // setTasks((prev)=>{
+      //   return (prev.filter((task,index)=>{
+      //     return index!==props.id;
+      //   }))
+      // })
+       const deletedTask=  db.collection("tasks").doc(props.currentTask.id).delete()
+       
+      deletedTask.then(()=>{
+        console.log("document deleted successfully!");
+      })
+      .catch((error)=>{
+        console.error(error);
       })
     }
     
