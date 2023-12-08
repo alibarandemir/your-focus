@@ -6,7 +6,9 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage:{
-        'counterBackground':"url('/src/images/counterBg.jpg')",
+        'forestBackground': "url('/src/images/forestBg.jpg')",
+        'seaBackground': "url('/src/images/seaBg.jpg')",
+        'libraryBackground': "url(/src/images/libraryBg.jpg)",
       },
     },
   },

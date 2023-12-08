@@ -25,11 +25,10 @@ function TaskList() {
           console.log(task)
           console.log(tasks)
             return(
-              <Task key={index} id={index} currentTask={task}/>
+              <Task key={index} id={task.id} currentTask={task}/>
             )
         })} 
     </div>
   )
 }
-
-export default TaskList
+export default TaskList;

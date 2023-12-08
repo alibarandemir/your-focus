@@ -4,10 +4,11 @@ import {FiClock} from 'react-icons/fi';
 import '../App.css';
 import TaskContext from '../Context/GlobalState';
 import { db } from '../db/firebase';
+import generateUniqueId from 'generate-unique-id';
 
 
 function CreateTask() {
-  const {task,setTask,setTasks} = useContext(TaskContext)
+  const {task,setTask,setTasks,tasks} = useContext(TaskContext)
   const [showWarning,setShowWarning] =useState(false);
   useEffect(()=>{
     //console.log(tasks);
@@ -30,30 +31,31 @@ function CreateTask() {
         setShowWarning(false);
         //adding task to task list
         setTasks((previous)=>[...previous,task]);
+        console.log(tasks);
+        //adding to db
         const docRef=db.collection("tasks").add(task);
-        
         docRef.then((doc)=>{
-        console.log(doc.id);
-        db.collection("tasks").doc(doc.id).update({
-          id:doc.id
+          console.log("task successfully added!")
         })
-      })
-      .catch((err)=>{
-        console.error(err);
-      })
-      console.log(docRef.id);
+        .catch((error)=>{
+          console.error("Error adding document" + error.message);
+        })
+        console.log(task);
         setTask({
           title:"",
           pomodoroNum:"1",
-        })
-      }
-   }
+        })  
+        
+      } 
+    }  
    const detectChange =(e)=>{
       const {name,value} = e.target;
       setTask((prev)=>{
         return{
           ...prev,
           [name]:value,
+          completed:false,
+          id:generateUniqueId({length:8,useLetters:true,useNumbers:true})
         }
       })
    }

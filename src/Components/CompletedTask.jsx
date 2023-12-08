@@ -4,6 +4,8 @@ import {motion} from 'framer-motion';
 import TaskContext from '../Context/GlobalState';
 import {MdDoneOutline} from 'react-icons/md';
 import {AiFillDelete,AiFillCloseCircle} from 'react-icons/ai';
+import { db } from '../db/firebase';
+
 const variants = {
   open: { opacity: 0, x: -30,},
   closed: { opacity: 1, x: 0 },
@@ -12,14 +14,32 @@ const variants = {
 function CompletedTask() {
   const [isOpen,setIsOpen] = useState(false);
   const {completedTasks,setCompletedTasks} = useContext(TaskContext);
-  function handleDeleteBtn(id){
-    setCompletedTasks((prev)=>{
-      return(prev.filter((task,index)=>{
-        return(index!==id);
-      }))
-    })
+  // useEffect(()=>{
+    
+  //   fetchedData();
+    
+  // },[completedTasks])
+  
+  function handleDeleteBtn(taskNum,completedTask){
+      db.collection("tasks").where("id",'==',completedTask.id).get()
+      .then((querySnapshot)=>{
+        querySnapshot.forEach(doc=>{
+          doc.ref.delete()
+          .then(()=>{
+            setCompletedTasks((prev)=>{
+              return (prev.filter((task)=>{
+                return task.id!==completedTask.id;
+              }))
+            })
+            console.log("document deleted successfully!")
+          })
+          .catch((error)=>{
+            console.error(error)
+          })
+        })
+      }) 
   }
-  console.log(completedTasks);
+  
   return (
     <div className='fixed w-14 h-14 left-0 top-28'>
       <motion.div onClick={()=>setIsOpen((prev)=>!prev)} animate={isOpen ? "open" : "closed" } className='fixed left-0 top-28 w-14 h-14 bg-green-800 flex justify-center items-center cursor-pointer'
@@ -39,14 +59,16 @@ function CompletedTask() {
             <h3 className='font-bold mr-7'>Completed Tasks!</h3>
             <AiFillCloseCircle className='text-2xl text-gray-700 cursor-pointer float-right' onClick={()=>setIsOpen((prev)=>!prev)}/>
           </div>
-          {completedTasks.map((task,index)=>{
+          {
+          
+          completedTasks.map((task,index)=>{
             return(
           <li className='snap-center  bg-green-900 text-white flex items-center relative mb-3 ' key={index}>
             <div className='flex items-center gap-x-2'>
             <MdDoneOutline className='text-xl'/>
             <p>{task.title}</p>
             </div>
-            <AiFillDelete onClick={()=>{handleDeleteBtn(index)}} className=' text-xl cursor-pointer absolute right-1'/>
+            <AiFillDelete onClick={()=>{handleDeleteBtn(index,task)}} className=' text-xl cursor-pointer absolute right-1'/>
           </li>)
         })}
         </div>
