@@ -4,18 +4,15 @@ import Main from './Main';
 import Counter from './Counter';
 import {Routes,Route} from 'react-router-dom';
 import ErrorPage from './ErrorPage';
-import TaskContext from '../Context/GlobalState';
+import TaskContext from '../Context/TaskContext';
 import PrivateRoute from '../PrivateRoute';
 import Register from './Register';
-import Loading from '../Components/Loading';
 import { Toaster } from 'react-hot-toast';
-import { auth } from '../db/firebase';
-import AuthProvider, { AuthContext } from '../Context/AuthContext';
+
+
 
 
 function Pages () {
-  
- const {user,isMainToCounter,loading}= useContext(AuthContext);
   const [task,setTask] = useState({
     id:"",
     title:"",
@@ -32,7 +29,7 @@ function Pages () {
           });
           
   }
-  
+  console.log(process.env.REACT_APP_API_KEY);
   return (
     
     <TaskContext.Provider value={{task, setTask,fetchedData,tasks,setTasks,completedTasks,setCompletedTasks}}>
@@ -40,10 +37,10 @@ function Pages () {
       <Routes>
         <Route  path='/' element={<Register/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/homepage' element={<PrivateRoute isAllowed={!!user}>
+        <Route path='/homepage' element={<PrivateRoute>
           <Main />
         </PrivateRoute>}/>
-        <Route path='/counter' element={<PrivateRoute redirectPath='/homepage' isAllowed={!!user&&isMainToCounter}>
+        <Route path='/counter' element={<PrivateRoute>
             <Counter/>
         </PrivateRoute>}/>
         

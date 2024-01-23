@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import {CgMenu} from 'react-icons/cg';
 import {motion} from 'framer-motion';
-import TaskContext from '../Context/GlobalState';
+import TaskContext from '../Context/TaskContext';
 import {MdDoneOutline} from 'react-icons/md';
 import {AiFillDelete,AiFillCloseCircle} from 'react-icons/ai';
-import { db } from '../db/firebase';
+import { db } from '../firebase/firebase';
+
 
 const variants = {
   open: { opacity: 0, x: -30,},
@@ -14,11 +15,6 @@ const variants = {
 function CompletedTask() {
   const [isOpen,setIsOpen] = useState(false);
   const {completedTasks,setCompletedTasks} = useContext(TaskContext);
-  // useEffect(()=>{
-    
-  //   fetchedData();
-    
-  // },[completedTasks])
   
   function handleDeleteBtn(taskNum,completedTask){
       db.collection("tasks").where("id",'==',completedTask.id).get()
@@ -69,6 +65,7 @@ function CompletedTask() {
             <p>{task.title}</p>
             </div>
             <AiFillDelete onClick={()=>{handleDeleteBtn(index,task)}} className=' text-xl cursor-pointer absolute right-1'/>
+            
           </li>)
         })}
         </div>

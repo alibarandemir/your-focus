@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import {BsPlusCircleFill} from 'react-icons/bs';
 import {FiClock} from 'react-icons/fi';
 import '../App.css';
-import TaskContext from '../Context/GlobalState';
-import { db } from '../db/firebase';
+import TaskContext from '../Context/TaskContext';
+import { db } from '../firebase/firebase';
 import generateUniqueId from 'generate-unique-id';
+import toast from 'react-hot-toast';
 
 
 function CreateTask() {
@@ -36,6 +37,11 @@ function CreateTask() {
         const docRef=db.collection("tasks").add(task);
         docRef.then((doc)=>{
           console.log("task successfully added!")
+          toast.success('Task successfully added',{
+            iconTheme:{
+              primary:'#15803d'
+            }
+          })
         })
         .catch((error)=>{
           console.error("Error adding document" + error.message);

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import TaskContext from '../Context/GlobalState';
+import TaskContext from '../Context/TaskContext';
 
 
 function Navbar() {

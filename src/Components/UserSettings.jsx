@@ -47,7 +47,6 @@ function UserSettings({selectedBgImg,setSelectedBgImg,getSelectedBackGround}) {
           </div>}
           
             <ReactPlayer url={selectedSound} loop={true} width={0} height={0} volume={0.2} playing={true}>
-
             </ReactPlayer>
           
       </>

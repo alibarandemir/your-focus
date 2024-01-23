@@ -2,15 +2,17 @@ import React, { useContext, useEffect, useState } from 'react'
 import {BsPlayCircleFill} from 'react-icons/bs';
 import {AiFillDelete,AiFillClockCircle} from 'react-icons/ai';
 import { motion,AnimatePresence } from 'framer-motion';
-import TaskContext from '../Context/GlobalState';
+import TaskContext from '../Context/TaskContext';
 import { useNavigate} from 'react-router-dom';
-import { db } from '../db/firebase';
+import { db } from '../firebase/firebase';
 import { AuthContext } from '../Context/AuthContext';
+import HandleDeleteTask from './HandleDeleteTask';
 
 function Task(props) {
     const {fetchedData,setTasks,completedTasks,setCompletedTasks} = useContext(TaskContext);
     const {setIsMainToCounter}= useContext(AuthContext)
     const [isChecked,setIsChecked] = useState(false);
+    const [isOpen,setIsOpen] = useState(false);
     const navigate =useNavigate();
     useEffect(()=>{
       controlTaskIsDone();
@@ -47,6 +49,8 @@ function Task(props) {
       }
     }
      const handleDeleteBtn =  ()=>{
+      setIsOpen(true);
+      
       console.log(props.id);
       db.collection("tasks").where("id",'==',props.currentTask.id).get()
       .then((querySnapshot)=>{
@@ -79,11 +83,14 @@ function Task(props) {
             <input className='grow-0 w-6 h-6 cursor-pointer' checked={isChecked} onChange={(e)=>{setIsChecked(e.target.checked)}} type='checkbox'/>
             <BsPlayCircleFill onClick={handleNavigate} className='grow-0 text-2xl cursor-pointer text-gray-700 hover:text-green-800'/>
             </div>
-            <p className='grow text-left text-2xl'>{props.currentTask.title}</p>
+            <p className='grow text-left text-2xl w-5/12'>{props.currentTask.title}</p>
+            <div className='flex'>
             {Array.from({length:props.currentTask.pomodoroNum }).map((_, index) => {
-              return(<AiFillClockCircle className='text-2xl'/>);
+              return(<AiFillClockCircle className='text-2xl  mr-2'/>);
             })}
-            <AiFillDelete onClick={handleDeleteBtn} className='grow-0 text-2xl cursor-pointer mx-4 text-gray-700 hover:text-green-800'/>
+            </div>
+            
+            <HandleDeleteTask styling='grow-0 text-2xl cursor-pointer mx-4 text-gray-700 hover:text-green-800' currentTask={props.currentTask.title} handleDeleteFunc={handleDeleteBtn}/>
         </div>
     </motion.div>
     </AnimatePresence>

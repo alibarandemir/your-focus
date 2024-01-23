@@ -5,7 +5,6 @@ import LogoToDo from '../assets/images/logo1.svg';
 import LogoTime from '../assets/images/logo2.svg';
 import toast from 'react-hot-toast';
 import { AuthContext } from '../Context/AuthContext';
-import { MoonLoader } from 'react-spinners';
 import Loading from '../Components/Loading';
 export default function Login() {
   const [email,setEmail] = useState('');
@@ -16,29 +15,28 @@ export default function Login() {
     setLoading(true)
     const timer = setTimeout(() => { //sayfa yüklenirken loading işlemi gözüksün diye geçiçi bir çözüm üretilmiştir
         setLoading(false);           
-      }, 1500);
+      }, 1300);
       return () => clearTimeout(timer);
 },[])
+    console.log(user);
   if(loading){
     console.log('login page loading')
     return(<Loading/>)
   }
-    // useEffect(()=>{
-    //     auth.onAuthStateChanged((user)=>{ //kullanıcının çıkış yapmadığı süre bpoyunca hep bu sayfada kalmasını sağlar
-    //         if(user){
-    //             navigate('/homepage')
-    //         }
-    //     })
-    // })
+    
     const handleSignIn=()=>{
         loginUser(email,password)
         .then(()=>{
+           
+            console.log('Successfully login')
+            console.log(user)
             navigate('/homepage')
             setLoading(false);
         })
         .catch((error)=>{
             toast.error(error.message);
             setLoading(false);
+            console.log('hatadayım')
         })
         console.log(loading)
     }
@@ -74,7 +72,6 @@ export default function Login() {
             </div>
             
         </form>
-
         <p className='font-medium'>Don't have an account?</p>
         <NavLink className='font-bold text-xl text-green-700' to='/'>Create Now</NavLink>
     </div>

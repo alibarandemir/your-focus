@@ -4,12 +4,15 @@ import {
     signInWithEmailAndPassword,
     signOut,
   } from "firebase/auth";
-  import { createContext, useEffect, useState } from "react";
-  import { auth } from "../db/firebase";
+import { createContext, useEffect, useState } from "react";
+import { auth } from "../firebase/firebase";
+import { useLocation, useNavigate } from "react-router-dom";
   
   export const AuthContext = createContext(null);
   
   const AuthProvider = ({ children }) => {
+    const location= useLocation();
+    const navigate = useNavigate()
     const [user, setUser] = useState(null);
     const [isMainToCounter,setIsMainToCounter]= useState(false);
     const [loading, setLoading] = useState(false);
@@ -20,9 +23,13 @@ import {
     };
   
     const loginUser = (email, password) => {
+      
       setLoading(true);
-      return signInWithEmailAndPassword(auth, email, password);
-    };
+     return(
+     
+       signInWithEmailAndPassword(auth, email, password))
+     
+     }
   
     const logOut = () => {
       setLoading(true);
@@ -32,23 +39,30 @@ import {
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        //setLoading(false);
-        
+        if(currentUser){
+          setLoading(false)
+          if(location.pathname!=='/homepage'){
+            setTimeout(()=>{navigate('/homepage')},2000)
+          }
+          else{
+            navigate('/homepage')
+          }
+        }
+        else{
+          setLoading(false);
+          if(location.pathname!=='/login' || location.pathname!=='/'){
+            setTimeout(()=>{navigate('/login')},3500)
+          }
+          else{
+              navigate('/login');
+          }
+        }
       });
   
       return () => {
         unsubscribe();
       };
     }, []);
-    // useEffect(()=>{
-    //   const timer = setTimeout(() => {
-    //     setLoading(false);
-    //   }, 2000);
-  
-    //   return () => clearTimeout(timer);
-    // },)   
-    
-  
     const authValue = {
       createUser,
       user,
@@ -59,10 +73,6 @@ import {
       isMainToCounter,
       setIsMainToCounter,
     };
-  
     return <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>;
   };
-  
-  
-  
   export default AuthProvider;

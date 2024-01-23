@@ -2,11 +2,11 @@ import React, { useState,useEffect, useContext } from 'react';
 import Navbar from '../Components/Navbar';
 import CreateTask from '../Components/CreateTask';
 import TaskList from '../Components/TaskList';
-import TaskContext from '../Context/GlobalState';
+import TaskContext from '../Context/TaskContext';
 import CompletedTask from '../Components/CompletedTask';
-import { db } from '../db/firebase';
+import { db } from '../firebase/firebase';
 import { collection } from 'firebase/firestore';
-import { auth } from '../db/firebase';
+import { auth } from '../firebase/firebase';
 import { useLocation } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -18,10 +18,9 @@ function Main() {
   const {user,logOut,loading,setLoading} = useContext(AuthContext);
   const location= useLocation();
   
-  console.log(location.pathname);
+  console.log(user)
   if(loading){
     console.log('mainden logine dönüş');
-
     return(<Loading/>)
   }
   const handleSignOut = () => {

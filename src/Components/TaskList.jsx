@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
-import TaskContext from '../Context/GlobalState'
+import TaskContext from '../Context/TaskContext'
 import Task from './Task';
-import { db } from '../db/firebase';
+import { db } from '../firebase/firebase';
 import { QuerySnapshot } from 'firebase/firestore';
 
 

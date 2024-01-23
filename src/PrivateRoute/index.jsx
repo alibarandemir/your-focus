@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { auth } from '../db/firebase'
+import { AuthContext } from '../Context/AuthContext';
 
-
-
-function PrivateRoute({children,redirectPath='/login',isAllowed}) {
-    const [isLogged,setIsLogged] = useState(false);
-    useEffect(()=>{
-        auth.onAuthStateChanged((user)=>{
-            if(user){
-                setIsLogged(true);
-            }
-        })
-    })
+function PrivateRoute({children}) {
+  const {user}= useContext(AuthContext); 
   return (
     <div>
-        {isAllowed ? children: <Navigate to={redirectPath} replace/>}
+        {user ? children: <Navigate to='/login'/>}
 
     </div>
   )
 }
 
-export default PrivateRoute
+export default PrivateRoute;

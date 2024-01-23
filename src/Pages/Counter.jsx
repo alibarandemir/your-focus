@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import {useLocation,useNavigate}from 'react-router-dom';
-import { db } from '../db/firebase';
-import TaskContext from '../Context/GlobalState';
+import { db } from '../firebase/firebase';
+import TaskContext from '../Context/TaskContext';
 import forestBackground from '../assets/images/forestBg.jpg';
 import seaBackground from '../assets/images/seaBg.jpg';
 import libraryBackground from '../assets/images/libraryBg.jpg';
@@ -15,7 +15,6 @@ import UserSettings from '../Components/UserSettings';
 function Counter() {
   const location = useLocation();
   const data= location.state.currentTask;
-  
   const {fetchedData,setTasks,setTask}= useContext(TaskContext)
   const navigate = useNavigate();
   const [time,setTime] = useState(1500);
@@ -88,15 +87,6 @@ function Counter() {
       setTask((prev)=>{
         return({...prev,pomodoroNum: data.pomodoroNum})
       })
-      // db.collection('tasks').where('id','==',data.id).get()
-      // .then((querySnapshot)=>{
-      //     querySnapshot.forEach((doc)=>{
-      //       db.collection('tasks').doc(doc.id).update({
-      //         pomodoroNum:data.pomodoroNum
-      //       }).then(()=>{console.log('task is updated!')}).catch((e)=>{console.error(e)})
-      //     })
-      // })
-      // .catch((e)=>{console.error(e)})
     }
   }
   const finishPomod =()=>{
@@ -143,5 +133,4 @@ function Counter() {
     </div>
   )
 }
-
 export default Counter
