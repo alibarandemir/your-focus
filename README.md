@@ -14,11 +14,11 @@ benim-projem'i npm kullanarak yükleyin
 ```
     
 ## Features
-
-- 
-- Canlı ön izleme
-- Tam ekran modu
-- Tüm platformlara destek
+- Authentication
+- Private Page
+- Error and Not Found Page
+- Smooth Animations
+- User Customization
 - Not Responsive
 
   
